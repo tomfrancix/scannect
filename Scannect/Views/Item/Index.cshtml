@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Scannect.Models.Item>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-center search container search-feed">
+    <h1 class="display-4">SCANNECT</h1>
+    <br />
+    <div class="search-box search-box-feed">
+        <i class="fa fa-search"></i>
+        <form action="/Search/Execute">
+            <input type="search" class="search-bar" />
+            <input type="submit" name="submit" value="Search..." class="btn btn-outline-dark text-dark" />
+        </form>
+    </div>
+
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+@foreach (var item in Model)
+{
+    <div class="card">
+        <div class="card-body search-body">
+            <a href="@item.Url">
+                <span class="h5 title">@item.Title</span>
+            </a>
+            <span class="category">@item.Category</span>
+            <span class="h6 snippet">@item.Snippet</span>
+        </div>
+    </div>
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<!--
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Url)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WebsiteUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Snippet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ranking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Url)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WebsiteUrl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Snippet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hits)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ranking)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+  
+  -->

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.14.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+    <PackageReference Include="TextToAsciiArt" Version="1.0.14.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Console\Console.csproj" />
+    <ProjectReference Include="..\Scannect\Scannect.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -2,7 +2,16 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center search container">
+    <h1 class="display-4">SCANNECT</h1>
+    <br/>
+    <div class="search-box">
+        <i class="fa fa-search"></i>
+        <form action="/Item/Index" method="post">
+            <input type="search" class="search-bar" name="input" placeholder="Search for anything..."/>
+            <input type="submit" name="submit" value="Search..." class="btn btn-outline-dark text-dark"/>
+        </form>
+        <a href="#" class="btn btn-outline-dark feeling-it text-dark">Feeling it...</a>
+    </div>
+
 </div>

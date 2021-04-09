@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Scannect.Models;
 
 namespace Scannect
 {
@@ -34,6 +35,12 @@ namespace Scannect
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddDbContext<ScannectContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DataConnection")));
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
             services.AddControllersWithViews();
         }
 
