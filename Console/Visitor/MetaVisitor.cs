@@ -61,6 +61,30 @@ namespace ScannectConsole.Visitor
                 }
             }
 
+            // Get all the title tags.
+            var titles = document.GetElementsByTagName("title");
+
+            foreach (var title in titles)
+            {
+                composite.Title = title.TextContent;
+                break;
+            }
+
+            // Get all the paragraph tags.
+            var snippetString = composite.Snippet ?? "";
+            var paragraphs = document.GetElementsByTagName("title");
+            foreach (var paragraph in paragraphs)
+            {
+                if (snippetString.Length < 200)
+                {
+                    snippetString += paragraph.TextContent;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             return composite;
         }
     }

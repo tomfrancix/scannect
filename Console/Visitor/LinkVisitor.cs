@@ -62,7 +62,19 @@ namespace ScannectConsole.Visitor
 
             foreach (var url in urls)
             {
-                SaveS3.SaveNewS3Link(url);
+                var tempUrl = url;
+                if (url.Contains("http"))
+                {
+                    tempUrl = url.Substring(4);
+                    if (tempUrl.Contains("http"))
+                    {
+                        tempUrl = tempUrl.Split("http")[0];
+                    }
+
+                    tempUrl = "http" + tempUrl;
+                }
+
+                SaveS3.SaveNewS3Link(tempUrl);
             }
 
             Console.WriteLine("Saved " + urls.Count + " links to S3 bucket.");

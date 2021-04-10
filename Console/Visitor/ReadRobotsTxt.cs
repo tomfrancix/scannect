@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ScannectConsole.Parser;
+using ScannectConsole.Repository;
 
 namespace ScannectConsole.Visitor
 {
@@ -32,6 +33,8 @@ namespace ScannectConsole.Visitor
                     url.Length > url.IndexOf("://", StringComparison.Ordinal) + 3)
                     url = url.Substring(url.IndexOf("://", StringComparison.Ordinal) + 3);
             }
+
+            if (CheckRepository.ItemExistsByUrl(url)) return false;
 
             // This should leave us with 'www.domain.co.uk'...
             domain += url.Split("/")[0];
@@ -69,14 +72,15 @@ namespace ScannectConsole.Visitor
             Thread.Sleep(1000);
 
             // Create request object.
-            var robotsRequest = (HttpWebRequest)WebRequest.Create(fullUri);
-                robotsRequest.Method = "GET";
+            var robotsRequest = (HttpWebRequest) WebRequest.Create(fullUri);
+            robotsRequest.Method = "GET";
 
             // Get the response object
             var robotsResponse = robotsRequest.GetResponse();
 
             // Read the response.
-            var reader = new StreamReader(robotsResponse.GetResponseStream() ?? throw new InvalidOperationException());
+            var reader =
+                new StreamReader(robotsResponse.GetResponseStream() ?? throw new InvalidOperationException());
             html = reader.ReadToEnd();
             reader.Close();
             robotsResponse.Close();
@@ -90,6 +94,7 @@ namespace ScannectConsole.Visitor
 
             // If we have a robots.txt file...
             return ParseRobotsTxt.Execute(html, postUrl).Result;
+
         }
     }
 }
