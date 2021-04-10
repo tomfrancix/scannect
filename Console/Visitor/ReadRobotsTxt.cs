@@ -20,7 +20,7 @@ namespace ScannectConsole.Visitor
         /// </summary>
         /// <param name="url"> The URL to hit.</param>
         /// <returns></returns>
-        public static async Task<bool> AmAllowed(string url)
+        public static bool AmAllowed(string url)
         {
             // We only want WWW. results.
             var domain = "";
@@ -59,7 +59,7 @@ namespace ScannectConsole.Visitor
             // Create the URL for robots.txt
             var robotsTxt = domain + "/robots.txt";
 
-            Console.WriteLine("Checking " + robotsTxt + " file to see if its okay to scrape this URL...");
+            Console.WriteLine(". . . Checking " + robotsTxt + " file to see if its okay to scrape this URL...");
 
             // Create the complicated URI crap for the request.
             var server = "http://" + domain;

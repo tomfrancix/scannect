@@ -5,7 +5,10 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using AngleSharp.Css.Dom;
 using AngleSharp.Dom;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Scannect.Controllers;
 using Scannect.Models;
 using Scannect.Repository;
@@ -33,6 +36,8 @@ namespace ScannectConsole.Visitor
             {
                 // Get their href.
                 var href = a.GetAttribute("href");
+
+                // TODO: Don't continue if the anchor element has visibility:hidden, or display:none! It's a trap!
 
                 // Do not continue without an href.
                 if (string.IsNullOrEmpty(href)) continue;
@@ -74,7 +79,10 @@ namespace ScannectConsole.Visitor
                     tempUrl = "http" + tempUrl;
                 }
 
-                SaveS3.SaveNewS3Link(tempUrl);
+                if (IsSiteSpecificallySound(url))
+                {
+                    SaveS3.SaveNewS3Link(tempUrl);
+                }
             }
 
             Console.WriteLine("Saved " + urls.Count + " links to S3 bucket.");
@@ -98,6 +106,87 @@ namespace ScannectConsole.Visitor
                 select File.ReadAllLines(obj))
                             .Any(linkLines => linkLines
                             .Any(link => href.Contains(link)));
+        }
+
+        public static bool IsSiteSpecificallySound(string url)
+        {
+            var blackListedWords = new List<string>()
+            {
+                "checkout",
+                "basket",
+                "payment",
+                "cart",
+                "sitemap"
+            };
+
+            foreach (var word in blackListedWords)
+            {
+                if (url.Contains(word))
+                {
+                    return false;
+                }
+            }
+
+            var originalUrl = url;
+
+            if (url.Contains("http://"))
+            {
+                url = url.Substring(7);
+            }
+            if (url.Contains("https://"))
+            {
+                url = url.Substring(8);
+            }
+            if (url.Contains("www."))
+            {
+                url = url.Substring(4);
+            }
+            if (url.Contains("/"))
+            { 
+                url = url.Substring(0, url.IndexOf("/", StringComparison.Ordinal));
+            }
+
+            var domain = url;
+            if (url.Split(".").Length == 4 || url.Split(".").Length == 3)
+            {
+                domain = url.Split(".")[1];
+            }
+            if (url.Split(".").Length == 2)
+            {
+                domain = url.Split(".")[0];
+            }
+
+
+            switch (domain)
+            {
+                case "wikipedia":
+                    if (!originalUrl.Contains("wikipedia.org/wiki/"))
+                    {
+                        return false;
+                    }
+                    if (!originalUrl.Contains("index.php"))
+                    {
+                        return false;
+                    }
+                    break;
+                case "surveymonkey":
+                case "d-nb":
+                case "facebook":
+                case "google":
+                case "twitter":
+                case "linkedin":
+                case "pluralsight":
+                case "udemy":
+                case "gov":
+                case "mediawiki":
+                case "wikidata":
+                case "loc":
+                    return false;
+                case "default":
+                    return true;
+            }
+
+            return true;
         }
     }
 }

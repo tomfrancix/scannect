@@ -46,31 +46,101 @@
                 <div class="card-body search-body">
                     @{
                         var itemUrl = item.Url;
-                        if (itemUrl.ToString().Length > 50)
+                        var tempUrl = itemUrl;
+
+                        if (itemUrl.Contains("://"))
                         {
-                            itemUrl = itemUrl.Substring(0, 50) + "...";
+                            tempUrl = itemUrl.Substring(itemUrl.IndexOf("://") + 3);
                         }
+                        if (tempUrl.EndsWith("/"))
+                        {
+                            tempUrl = tempUrl.Substring(0, tempUrl.Length - 1);
+                        }
+                        var parts = tempUrl.Split("/");
+                        var newUrl = itemUrl;
+                        if (parts.Length > 1)
+                        {
+                            newUrl = "https://" + parts[0] + " > " + parts[1];
+                        }
+                        if (parts.Length > 2)
+                        {
+                            newUrl = "https://" + parts[0] + " > " + parts[1] + " > " + parts[2];
+                        }
+                        if (parts.Length > 3)
+                        {
+                            newUrl = "https://" + parts[0] + " > " + parts[1] + " > " + parts[2] + " > " + parts[3];
+                        }
+                        if (newUrl.ToString().Length > 80)
+                        {
+                            newUrl = newUrl.Substring(0, 80) + "...";
+                        }
+
+
                     }
-                    <span class="category">@itemUrl > @item.Category</span>
+                    
+                    
+
+                    <span class="category">@newUrl  @if (item.Category.Length > 0)
+                                                      {
+                                                          <span>> @item.Category</span>
+                                                      }</span>
                     <a href="@item.Url">
                         <span class="h5 title">@item.Title</span>
                     </a>
                     <span class="h6 snippet">@item.Snippet</span>
+                    <div class="tag-list">
+
+                        @{
+                            var countTags = 0;
+                            foreach (var tag in item.Tags)
+                            {
+                                if (countTags > 4)
+                                {
+                                    break;
+                                }
+
+                                if (Convert.ToInt32(tag.Ranking) < 7)
+                                {
+                                    var shouldDisplay = false;
+                                    foreach (var word in ViewBag.Input)
+                                    {
+                                        if (tag.Title.ToLower().Contains(word.ToLower()))
+                                        {
+                                            shouldDisplay = true;
+                                            countTags++;
+                                        }
+                                    }
+                                    if (shouldDisplay)
+                                    {
+                                        <span class="tag">@tag.Title</span>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
                 </div>
             </div>
         }
     </div>
     <div class="tab-pane container fade" id="images">
-        <div class="container-fluid" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+        <div class="container-fluid" >
             @foreach (var item in Model)
             {
                 if (item.Images != null && item.Images.Count > 0)
                 {
                     foreach (var image in item.Images)
                     {
-                        <div class="card" style="flex-wrap: wrap; padding: 8px;">
-                            <img src="@image.Url" style="height: 150px;"/>
-                            <a href="@item.Url">@image.Alt</a>
+                        var alt = image.Alt;
+                        if (image.Alt.Length > 80)
+                        {
+                            alt = image.Alt.Substring(0, 80);
+                        }
+                        <div class="gallery">
+                            <a target="_blank" href="@item.Url">
+                                <img src="@image.Url" alt="@image.Alt" width="600" height="400">
+                            </a>
+                            
+                            <div class="desc">@alt...</div>
                         </div>
                     }
                 }

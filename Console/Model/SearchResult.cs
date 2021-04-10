@@ -21,5 +21,6 @@ namespace ScannectConsole.Model
         public string Category { get; set; }
         public string Author { get; set; }
         public List<ItemImage> Images { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }

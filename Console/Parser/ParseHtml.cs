@@ -26,7 +26,7 @@ namespace ScannectConsole.Parser
 
             var document = await context.OpenAsync(req => req.Content(html));
 
-            Console.WriteLine("Parsing the source...");
+            Console.WriteLine("Parsing the HTML...");
 
             var composite = new Item();
 
@@ -57,6 +57,9 @@ namespace ScannectConsole.Parser
 
             // This will append information to the message object - if any is found!
             composite = ImageVisitor.GetImages(document, composite);
+
+            // This will append information to the message object - if any is found!
+            composite = KeyWordVisitor.GetKeywords(document, composite);
 
             try
             {

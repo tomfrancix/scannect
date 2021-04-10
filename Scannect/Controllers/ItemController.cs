@@ -22,10 +22,11 @@ namespace Scannect.Controllers
 
         // GET: Item
         [HttpPost]
-        public async Task<IActionResult> Index(string input)
+        public IActionResult Index(string input)
         {
             var results = ItemRepository.GetSearchResults(input, _context);
             ViewBag.Count = results.Count;
+            ViewBag.Input = input.Split(" ").ToList();
             return View(results);
         }
 

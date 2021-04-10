@@ -31,7 +31,8 @@ namespace ScannectConsole.S3
                 Snippet = message.Snippet,
                 Category = message.Category,
                 Author = message.Author,
-                Images = message.Images
+                Images = message.Images,
+                Tags = message.Tags
             };
 
             // Serialize the JObject into a string.
@@ -48,7 +49,7 @@ namespace ScannectConsole.S3
 
             File.AppendAllText(filePath, line + Environment.NewLine);
 
-            Console.WriteLine("A new line was added to the file!");
+            Console.WriteLine("A new item was saved to the bucket!");
         }
 
         /// <summary>
@@ -62,9 +63,11 @@ namespace ScannectConsole.S3
             var date = dateString.Substring(0,
                 dateString.IndexOf(dateString.Substring(dateString.Length - 5), StringComparison.Ordinal));
             date = date.Replace("-", "").Replace(":", "");
-            
+
+            var rand = new Random();
+
             // This is the new file path for the link.
-            var filePath = "C:\\S3\\wd-nskater-links\\" + date + "-link-item.txt";
+            var filePath = "C:\\S3\\wd-nskater-links\\" + date + "-" + rand.Next(0, 100) + "-link-item.txt";
 
             File.AppendAllText(filePath, link);
         }

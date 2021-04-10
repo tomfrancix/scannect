@@ -73,8 +73,6 @@ namespace ScannectConsole.Repository
                         using (var command = new SqlCommand(imageSql, connection))
                         {
                             command.ExecuteNonQuery();
-
-                            Console.WriteLine("A new item was saved to the database.");
                         }
                     }
                     catch
@@ -86,7 +84,37 @@ namespace ScannectConsole.Repository
                 }
             }
 
+            if (item.Tags != null && item.Tags.Count != 0)
+            {
+                foreach (var tag in item.Tags)
+                {
+                    var build = new StringBuilder();
+                    build.Append(
+                        "INSERT INTO Tag (Title, Hits, Ranking, ItemId) VALUES ");
+                    build.Append("('" + tag.Title + "','" +
+                                 tag.Hits + "','" + tag.Ranking + "','" + itemId + "')");
+                    var tagSql = build.ToString();
+
+                    connection.Open();
+                    try
+                    {
+                        using (var command = new SqlCommand(tagSql, connection))
+                        {
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Failed to save tag.\n " + e);
+                    }
+
+                    connection.Close();
+                }
+            }
+
             connection.Close();
+
+            Console.WriteLine(" - Save complete!");
         }
         public static bool ItemExistsByUrl(string url)
         {

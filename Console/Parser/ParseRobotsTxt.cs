@@ -42,14 +42,23 @@ namespace ScannectConsole.Parser
 
             // Loop through items that contain 'User-agent: *', split them by ':',
             // get the 'Disallow' property, and see if it contains '/' or our latterUrl.
-            if (!(from item in fullArray
+            var allowed = false;
+
+            allowed = !(from item in fullArray
                 where item.Contains("User-agent: *")
                 from i in item.Split(":")
                 where i.Contains("Disallow")
                 where (i + 1).Contains("/")
-                select i).Any(i => (i + 1).Contains(latterUrl))) return true;
+                select i).Any(i => (i + 1).Contains(latterUrl));
 
-            // If we found it, we can't scrape it!
+
+            if (!fullArray.Any(item => item.Contains(latterUrl)))
+            {
+                return true;
+            }
+
+
+            // If we found the URL in robots.txt, we can't scrape it!
             Console.WriteLine("This URL is not permitted for scraping.");
             return false;
         }

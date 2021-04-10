@@ -107,7 +107,8 @@ namespace Commander
                         Ranking = 0,
                         Category = searchResult.Category,
                         Author = searchResult.Author,
-                        Images = searchResult.Images
+                        Images = searchResult.Images,
+                        Tags = searchResult.Tags
                     };
 
                     ResultRepository.SaveItem(item);

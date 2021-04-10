@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ScannectConsole.Repository;
 using ScannectConsole.S3;
 using ScannectConsole.Visitor;
 using TextToAsciiArt;
@@ -19,6 +20,7 @@ namespace ScannectConsole
 
             Console.WriteLine(data);
 
+            CullAllDuplicates.Execute();
             StartTool("");
         }
 
@@ -53,10 +55,10 @@ namespace ScannectConsole
                     {
                         try
                         {
-                            if (!RobotsVisitor.AmAllowed(link).Result) continue;
+                            if (!RobotsVisitor.AmAllowed(link)) continue;
 
                             // If we are allowed, go there and scrape it!
-                            Console.WriteLine("Scraping URL: " + link);
+                            Console.WriteLine("We are allowed! Continuing to scrape URL: " + link);
                             DownloadVisitor.DownloadHtml(link);
                         }
                         catch
@@ -72,7 +74,7 @@ namespace ScannectConsole
 
                     try
                     {
-                        if (RobotsVisitor.AmAllowed(url).Result)
+                        if (RobotsVisitor.AmAllowed(url))
                         {
                             // If we are allowed, go there and scrape it!
                             Console.WriteLine("Scraping URL: " + url);

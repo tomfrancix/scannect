@@ -106,7 +106,7 @@ namespace Scannect.Migrations
                     b.Property<string>("Hits")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ItemId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("Ranking")
@@ -135,9 +135,13 @@ namespace Scannect.Migrations
 
             modelBuilder.Entity("Scannect.Models.Tag", b =>
                 {
-                    b.HasOne("Scannect.Models.Item", null)
+                    b.HasOne("Scannect.Models.Item", "Item")
                         .WithMany("Tags")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Scannect.Models.Item", b =>

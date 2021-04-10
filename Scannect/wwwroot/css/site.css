@@ -147,7 +147,7 @@ a.feeling-it {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: transparent;
 }
 
 /* Handle */
@@ -181,3 +181,46 @@ footer {
     height: 28px;
 
 }
+div.gallery {
+    margin: 5px;
+    border: none;
+    float: left;
+    width: 250px;
+    height: 220px;
+    overflow:hidden;
+}
+div.gallery:hover {
+    background-color: rgba(250, 250, 250, 1);
+}
+div.gallery a {
+    height: 170px;
+    overflow: hidden;
+    border-radius: 10px;
+    display: block;
+    border: 1px solid rgba(20, 20, 20, 1);
+}
+div.gallery img {
+    width: 100%;
+    height: auto;
+    min-height: 170px;
+    
+    border-radius: 10px;
+}
+
+div.gallery a:hover {
+    border-radius: 10px;
+    border: 1px solid gold;
+}
+
+div.desc {
+    padding: 5px;
+    text-align: center;
+    font-size: 0.8em;
+}
+.tag {
+    border-radius: 5px;
+    color: grey;
+    background-color: rgba(240, 240, 240, 1);
+    padding: 1px 5px 3px 5px;
+}
+

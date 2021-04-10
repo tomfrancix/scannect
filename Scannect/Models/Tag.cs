@@ -11,5 +11,8 @@ namespace Scannect.Models
         public string Title { get; set; }
         public string Hits { get; set; }
         public string Ranking { get; set; }
+
+        public int ItemId { get; set; }
+        public Item Item { get; set; }
     }
 }
