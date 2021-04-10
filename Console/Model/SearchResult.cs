@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Scannect.Models;
 
 namespace ScannectConsole.Model
 {
@@ -19,5 +20,6 @@ namespace ScannectConsole.Model
         public int Ranking { get; set; }
         public string Category { get; set; }
         public string Author { get; set; }
+        public List<ItemImage> Images { get; set; }
     }
 }

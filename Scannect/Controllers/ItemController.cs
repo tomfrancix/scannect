@@ -25,6 +25,7 @@ namespace Scannect.Controllers
         public async Task<IActionResult> Index(string input)
         {
             var results = ItemRepository.GetSearchResults(input, _context);
+            ViewBag.Count = results.Count;
             return View(results);
         }
 

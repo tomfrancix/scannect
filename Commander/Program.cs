@@ -19,7 +19,7 @@ namespace Commander
         {
             var writer = new ArtWriter();
 
-            var data = writer.WriteString("NSKATER");
+            var data = writer.WriteString("VORTEX");
 
             Console.WriteLine(data);
 
@@ -49,10 +49,14 @@ namespace Commander
 
                 Thread.Sleep(delay);
 
+                s3Objects = Directory.GetFiles(sourceBucket).ToList();
+                numberOfResultsProcess = s3Objects.Count();
+
             } while (numberOfResultsProcess == 0);
 
             if (numberOfResultsProcess > 0)
             {
+                Console.WriteLine(" - Found " + numberOfResultsProcess + " objects in S3 bucket.");
                 ProcessResults(s3Objects);
             }
         }
@@ -90,7 +94,7 @@ namespace Commander
                     Console.WriteLine("Failed to deserialize the JSON file.");
                 }
 
-                if (!string.IsNullOrEmpty(searchResult.Title) && !string.IsNullOrEmpty(searchResult.Url))
+                if (!string.IsNullOrEmpty(searchResult.Url))
                 {
                     var item = new Item
                     {
@@ -103,11 +107,16 @@ namespace Commander
                         Ranking = 0,
                         Category = searchResult.Category,
                         Author = searchResult.Author,
+                        Images = searchResult.Images
                     };
 
                     ResultRepository.SaveItem(item);
                 }
+
+                File.Delete(obj);
             }
+
+            Execute();
         }
     }
 }

@@ -58,12 +58,19 @@ namespace ScannectConsole.Repository
 
             using (var command = new SqlCommand(sql, connection))
             {
-                var result = command.ExecuteReader();
-
-                if (result.HasRows)
+                try
                 {
-                    connection.Close();
-                    return true;
+                    var result = command.ExecuteReader();
+
+                    if (result.HasRows)
+                    {
+                        connection.Close();
+                        return true;
+                    }
+                }
+                catch
+                {
+                    Console.WriteLine("Cannot read encode URLs");
                 }
             }
             connection.Close();

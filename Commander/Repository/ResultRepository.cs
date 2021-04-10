@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Data.SqlClient;
 using Scannect.Models;
 
@@ -15,11 +18,15 @@ namespace ScannectConsole.Repository
         public static void SaveItem(Item item)
         {
             var connection = new SqlConnection(connectionString);
+            
+            if (ItemExistsByUrl(item.Url)) return;
 
-            connection.Open();
             try
             {
-                item.Snippet = item.Snippet.Replace("'", "");
+                if (item.Snippet != null)
+                {
+                    item.Snippet = item.Snippet.Replace("'", "");
+                }
             }
             catch
             {
@@ -28,21 +35,55 @@ namespace ScannectConsole.Repository
 
             var builder = new StringBuilder();
             builder.Append("INSERT INTO Item (Url, WebsiteUrl, Title, Snippet, DateCreated, Hits, Ranking, Category, Author) VALUES ");
-            builder.Append("('" + item.Url + "','" + item.WebsiteUrl + "','" + item.Title + "','" + item.Snippet + "','" + DateTime.UtcNow + "','" + 0 + "','" + 0 + "','" + item.Category + "','" + item.Author + "')");
+            builder.Append("('" + item.Url + "','" + item.WebsiteUrl + "','" + item.Title + "','" + item.Snippet + "','" + DateTime.UtcNow + "','" + 0 + "','" + 0 + "','" + item.Category + "','" + item.Author + "');");
+            builder.Append(" SELECT CAST(scope_identity() AS int)");
             var sql = builder.ToString();
+            var itemId = 0;
 
-            try
+            using(SqlConnection conn = new SqlConnection(connectionString))
             {
-                using (var command = new SqlCommand(sql, connection))
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                try
                 {
-                    command.ExecuteNonQuery();
-
-                    Console.WriteLine("Query Executed.");
+                    conn.Open();
+                    itemId = (int)cmd.ExecuteScalar();
+                    Console.WriteLine("A new item was saved to the database.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
             }
-            catch
+
+            if (item.Images != null && item.Images.Count != 0)
             {
-                Console.WriteLine("Failed to save item.");
+                foreach (var image in item.Images)
+                {
+                    var build = new StringBuilder();
+                    build.Append(
+                        "INSERT INTO ItemImage (Url, Alt, Title, Annotation, Placeholder, Width, Height, ItemId) VALUES ");
+                    build.Append("('" + image.Url + "','" + image.Alt + "','" + image.Title + "','" +
+                                 image.Annotation + "','" + image.Placeholder + "','" + image.Width + "','" +
+                                 image.Height + "','" + itemId + "')");
+                    var imageSql = build.ToString();
+
+                    connection.Open();
+                    try
+                    {
+                        using (var command = new SqlCommand(imageSql, connection))
+                        {
+                            command.ExecuteNonQuery();
+
+                            Console.WriteLine("A new item was saved to the database.");
+                        }
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Failed to save item.");
+                    }
+
+                    connection.Close();
+                }
             }
 
             connection.Close();

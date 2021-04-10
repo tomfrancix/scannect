@@ -9,8 +9,8 @@
     <br />
     <div class="search-box search-box-feed">
         <i class="fa fa-search"></i>
-        <form action="/Search/Execute">
-            <input type="search" class="search-bar" />
+        <form action="/Item/Index" method="post">
+            <input type="search" class="search-bar" name="input" placeholder="Search for anything..." />
             <input type="submit" name="submit" value="Search..." class="btn btn-outline-dark text-dark" />
         </form>
     </div>
@@ -20,20 +20,77 @@
 <br />
 <br />
 <br />
-<br />
-<br />
-@foreach (var item in Model)
-{
-    <div class="card">
-        <div class="card-body search-body">
-            <a href="@item.Url">
-                <span class="h5 title">@item.Title</span>
-            </a>
-            <span class="category">@item.Category</span>
-            <span class="h6 snippet">@item.Snippet</span>
-        </div>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#all">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#images">Images</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#videos">Videos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link disabled" data-toggle="tab" href="#tools">Tools</a>
+    </li>
+</ul>
+<div class="tab-content" style="overflow-y: scroll; height: 80vh;">
+    <br />
+    <span class="estimated-result-count"><strong>About @ViewBag.Count results</strong></span>
+    <br />
+    <br />
+    <div class="tab-pane container active" id="all" style="padding: 0;">
+        @foreach (var item in Model)
+        {
+            <div class="card">
+                <div class="card-body search-body">
+                    @{
+                        var itemUrl = item.Url;
+                        if (itemUrl.ToString().Length > 50)
+                        {
+                            itemUrl = itemUrl.Substring(0, 50) + "...";
+                        }
+                    }
+                    <span class="category">@itemUrl > @item.Category</span>
+                    <a href="@item.Url">
+                        <span class="h5 title">@item.Title</span>
+                    </a>
+                    <span class="h6 snippet">@item.Snippet</span>
+                </div>
+            </div>
+        }
     </div>
-}
+    <div class="tab-pane container fade" id="images">
+        <div class="container-fluid" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+            @foreach (var item in Model)
+            {
+                if (item.Images != null && item.Images.Count > 0)
+                {
+                    foreach (var image in item.Images)
+                    {
+                        <div class="card" style="flex-wrap: wrap; padding: 8px;">
+                            <img src="@image.Url" style="height: 150px;"/>
+                            <a href="@item.Url">@image.Alt</a>
+                        </div>
+                    }
+                }
+            }
+        </div>
+        
+    </div>
+    <div class="tab-pane container fade" id="videos">
+
+    </div>
+    <div class="tab-pane container fade" id="tools">
+
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -112,5 +169,5 @@
         }
     </tbody>
 </table>
-  
+
   -->

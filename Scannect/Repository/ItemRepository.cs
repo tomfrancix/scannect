@@ -15,7 +15,10 @@ namespace Scannect.Repository
 
         public static  List<Item> GetSearchResults(string input, ScannectContext context)
         {
-            var items = context.Items.Where(i => i.Title.Contains(input)).ToListAsync().Result;
+            var items = context.Items
+                .Where(i => i.Title.Contains(input) || i.Snippet.Contains(input))
+                .Include(i => i.Images)
+                .ToListAsync().Result;
 
             return items;
         }
