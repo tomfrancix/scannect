@@ -6,11 +6,15 @@ The front end was a simple ASP.NET web application with a search bar...
 
 ![Untitled](https://github.com/tomfrancix/scannex/assets/58977284/34ec009c-8065-49b5-9fdf-9bd367fd9182)
 
+# Setup
+
 To set up the database:
 
 - Clone it
 - Run the website, and register a new user.
 - Open the Nuget Package manager and run `Update-Database -Context ScannectContext`
+
+# Scraper
 
 Then run the 'scraper' console application where you will have the option to scrape any URL. 
 
@@ -20,9 +24,15 @@ The URL metadata will be saved to an S3 bucket, and a list of all the URLs disco
 
 Each URL discovered is then visited causing a continuous cycle of scraping... (I know... it's a bit insane...)
 
+# Consumer
+
 Then, run the 'vortex' console application to process all the payloads in S3.
 
+![Untitled4](https://github.com/tomfrancix/scannex/assets/58977284/6fca059c-a577-4ad8-9fea-68ea285d67af)
+
 They can both run simultaneously.
+
+# Search
 
 Then, run the website and search for something...
 
